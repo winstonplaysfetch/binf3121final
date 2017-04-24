@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Mannitol transgene and salt stress - in plants.\"\nauthor: \"Jennifer Daly, Micaela Beckman\"\ndate: \"April 24, 2017\"\noutput: html_document\n---\n\n",
+    "created" : 1493052578179.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "252669770",
+    "id" : "578E2EBE",
+    "lastKnownWriteTime" : 1493053806,
+    "last_content_update" : 1493053806576,
+    "path" : "~/Desktop/UNCC_Spring_2017/BINF 3121 Biostat/Final_project/plants_saltstress_finalproject.Rmd",
+    "project_path" : "plants_saltstress_finalproject.Rmd",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
