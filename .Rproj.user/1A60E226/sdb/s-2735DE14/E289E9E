@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "id,genotype,treatment,filename\nM6PR.U1,M6PR,U,GSM455422_1873-RG.CEL.gz\nM6PR.U2,M6PR,U,GSM455423_1899-RG.CEL.gz\nM6PR.T1,M6PR,T,GSM455424_1871-RG.CEL.gz\nM6PR.T2,M6PR,T,GSM455425_1901-RG.CEL.gz\nCOL.U1,COL,U,GSM455426_1874-RG.CEL.gz\nCOL.U2,COL,U,GSM455427_1900-RG.CEL.gz\nCOL.T1,COL,T,GSM455428_1902-RG.CEL.gz\nCOL.T2,COL,T,GSM455429_2064-RG.CEL.gz\n\n",
+    "created" : 1493057819195.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2104072889",
+    "id" : "E289E9E",
+    "lastKnownWriteTime" : 1493058421,
+    "last_content_update" : 1493058421,
+    "path" : "~/Desktop/UNCC_Spring_2017/BINF 3121 Biostat/Final_project/samples.txt",
+    "project_path" : "samples.txt",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "text"
+}

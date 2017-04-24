@@ -1,14 +1,14 @@
 {
     "collab_server" : "",
-    "contents" : "---\ntitle: \"Mannitol transgene and salt stress - in plants.\"\nauthor: \"Jennifer Daly, Micaela Beckman\"\ndate: \"April 24, 2017\"\noutput: html_document\n---\n\n",
+    "contents" : "---\ntitle: \"Mannitol transgene and salt stress - in plants.\"\nauthor: \"Jennifer Daly, Micaela Beckman\"\ndate: \"April 24, 2017\"\noutput: html_document\n---\n\n```{r, message=FALSE, warning=F}\n#Required libraries\nlibrary(affy)\nlibrary(limma)\nlibrary(RSQLite)\n#Import data from sources\npd = read.AnnotatedDataFrame(\"samples.txt\",header=TRUE,sep=\",\",row.names=1) \nmydata = ReadAffy(filenames=pd$filename,phenoData=pd,verbose=TRUE)\nsampleNames(mydata)=row.names(pData(pd))\n#Call functions to organize data\neset = rma(mydata)\nexpression_data = exprs(eset)\n```\n",
     "created" : 1493052578179.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "252669770",
+    "hash" : "2725918807",
     "id" : "578E2EBE",
-    "lastKnownWriteTime" : 1493053806,
-    "last_content_update" : 1493053806576,
+    "lastKnownWriteTime" : 1493058297,
+    "last_content_update" : 1493058297466,
     "path" : "~/Desktop/UNCC_Spring_2017/BINF 3121 Biostat/Final_project/plants_saltstress_finalproject.Rmd",
     "project_path" : "plants_saltstress_finalproject.Rmd",
     "properties" : {
