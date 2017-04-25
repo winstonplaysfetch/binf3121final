@@ -18,3 +18,38 @@ sampleNames(mydata)=row.names(pData(pd))
 eset = rma(mydata)
 expression_data = exprs(eset)
 ```
+COL.U1 has multiple blobs on it's image check.
+
+Histogram is not normal but we will normalize the data using eset.
+
+```{r}
+TS = paste(pd$genotype,pd$treatment,sep=".")
+TS = factor(TS, levels= c("M6PR.U","M6PR.T","COL.U","COL.T"))
+```
+
+```{r}
+exp_design = model.matrix(~0 + TS)
+colnames(exp_design) = levels(TS)
+exp_design
+```
+
+```{r}
+fit=lmFit(eset,exp_design)
+```
+
+```{r}
+cont.matrix= makeContrasts(
+    M6PR.TvU = M6PR.U - M6PR.T,
+    COL.UvT = COL.U - COL.T,
+    M6PRvCOL.T = M6PR.T - COL.T,
+    M6PRvCOL.U = M6PR.U - COL.U,
+    levels = exp_design)
+fit2 = contrasts.fit(fit,cont.matrix)
+fit2 = eBayes(fit2)
+```
+
+
+```{r}
+result = decideTests(fit2,p.value=0.05, lfc = 1)
+vennDiagram(result)
+```
