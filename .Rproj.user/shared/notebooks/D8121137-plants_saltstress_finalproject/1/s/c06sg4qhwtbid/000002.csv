@@ -1,0 +1,43 @@
+"0","#Required libraries"
+"0","library(affy)"
+"0","library(limma)"
+"0","library(RSQLite)"
+"0","#Import data from sources"
+"0","pd = read.AnnotatedDataFrame(""samples.txt"",header=TRUE,sep="","",row.names=1) "
+"0","mydata = ReadAffy(filenames=pd$filename,phenoData=pd,verbose=TRUE)"
+"1","1"
+"1"," "
+"1","reading"
+"1"," "
+"1","GSM455422_1873-RG.CEL.gz"
+"1"," "
+"1","..."
+"1","instantiating an AffyBatch (intensity a 506944x8 matrix)..."
+"1","done.
+"
+"1","Reading in : GSM455422_1873-RG.CEL.gz
+"
+"1","Reading in : GSM455423_1899-RG.CEL.gz
+"
+"1","Reading in : GSM455424_1871-RG.CEL.gz
+"
+"1","Reading in : GSM455425_1901-RG.CEL.gz
+"
+"1","Reading in : GSM455426_1874-RG.CEL.gz
+"
+"1","Reading in : GSM455427_1900-RG.CEL.gz
+"
+"1","Reading in : GSM455428_1902-RG.CEL.gz
+"
+"1","Reading in : GSM455429_2064-RG.CEL.gz
+"
+"0","sampleNames(mydata)=row.names(pData(pd))"
+"0","#Call functions to organize data"
+"0","eset = rma(mydata)"
+"1","Background correcting
+"
+"1","Normalizing
+"
+"1","Calculating Expression
+"
+"0","expression_data = exprs(eset)"

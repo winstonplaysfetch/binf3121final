@@ -1,0 +1,8 @@
+"0","cont.matrix= makeContrasts("
+"0","    M6PR.TvU = M6PR.U - M6PR.T,"
+"0","    COL.UvT = COL.U - COL.T,"
+"0","    M6PRvCOL.T = M6PR.T - COL.T,"
+"0","    M6PRvCOL.U = M6PR.U - COL.U,"
+"0","    levels = exp_design)"
+"0","fit2 = contrasts.fit(fit,cont.matrix)"
+"0","fit2 = eBayes(fit2)"

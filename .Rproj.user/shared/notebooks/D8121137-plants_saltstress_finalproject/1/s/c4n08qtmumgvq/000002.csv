@@ -1,0 +1,2 @@
+"0","TS = paste(pd$genotype,pd$treatment,sep=""."")"
+"0","TS = factor(TS, levels= c(""M6PR.U"",""M6PR.T"",""COL.U"",""COL.T""))"

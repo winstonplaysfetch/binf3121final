@@ -1,0 +1,4 @@
+"0","#differentiate between up-regulated and down-regulated genes. "
+"0","M6PR.TvU.up = (M6PR.U - M6PR.T) > 0"
+"2","Error: object 'M6PR.U' not found
+"

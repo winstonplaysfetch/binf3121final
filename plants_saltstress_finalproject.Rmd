@@ -50,6 +50,15 @@ fit2 = eBayes(fit2)
 
 
 ```{r}
-result = decideTests(fit2,p.value=0.05, lfc = 1)
-vennDiagram(result)
+# lfc =1 for 2-fold changes
+result = decideTests(fit2, p.value=0.05, lfc=1)
+
+colnames = c("M6PR.TvU",	"COL.UvT",	"M6PRvCOL.T",	"M6PRvCOL.U")
+rownames = c("upregulated", "downregulated")
+upregulated = c(sum(result[,1]>0), sum(result[,2]>0), sum(result[,3]>0), sum(result[,4]>0))
+downregulated = c(sum(result[,1]<0), sum(result[,2]<0), sum(result[,3]<0), sum(result[,4]<0))
+
+resultsMatrix = matrix(c(upregulated, downregulated), nrow=2, dimnames=list(rownames, colnames))
+barplot(as.matrix(resultsMatrix), beside=TRUE)
 ```
+

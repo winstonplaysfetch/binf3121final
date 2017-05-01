@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "---\ntitle: \"Mannitol transgene and salt stress - in plants.\"\nauthor: \"Jennifer Daly, Micaela Beckman\"\ndate: \"April 24, 2017\"\noutput: html_document\n---\n\n```{r, message=FALSE, warning=F}\n#Required libraries\nlibrary(affy)\nlibrary(limma)\nlibrary(RSQLite)\n#Import data from sources\npd = read.AnnotatedDataFrame(\"samples.txt\",header=TRUE,sep=\",\",row.names=1) \nmydata = ReadAffy(filenames=pd$filename,phenoData=pd,verbose=TRUE)\nsampleNames(mydata)=row.names(pData(pd))\n#Call functions to organize data\neset = rma(mydata)\nexpression_data = exprs(eset)\n```\nCOL.U1 has multiple blobs on it's image check.\n\nHistogram is not normal but we will normalize the data using eset.\n\n```{r}\nTS = paste(pd$genotype,pd$treatment,sep=\".\")\nTS = factor(TS, levels= c(\"M6PR.U\",\"M6PR.T\",\"COL.U\",\"COL.T\"))\n```\n\n```{r}\nexp_design = model.matrix(~0 + TS)\ncolnames(exp_design) = levels(TS)\nexp_design\n```\n\n```{r}\nfit=lmFit(eset,exp_design)\n```\n\n```{r}\ncont.matrix= makeContrasts(\n    M6PR.TvU = M6PR.U - M6PR.T,\n    COL.UvT = COL.U - COL.T,\n    M6PRvCOL.T = M6PR.T - COL.T,\n    M6PRvCOL.U = M6PR.U - COL.U,\n    levels = exp_design)\nfit2 = contrasts.fit(fit,cont.matrix)\nfit2 = eBayes(fit2)\n```\n\n\n```{r}\n# lfc =1 for 2-fold changes\nresult = decideTests(fit2, p.value=0.05, lfc=1)\n\ncolnames = c(\"M6PR.TvU\",\t\"COL.UvT\",\t\"M6PRvCOL.T\",\t\"M6PRvCOL.U\")\nrownames = c(\"upregulated\", \"downregulated\")\nupregulated = c(sum(result[,1]>0), sum(result[,2]>0), sum(result[,3]>0), sum(result[,4]>0))\ndownregulated = c(sum(result[,1]<0), sum(result[,2]<0), sum(result[,3]<0), sum(result[,4]<0))\n\nresultsMatrix = matrix(c(upregulated, downregulated), nrow=2, dimnames=list(rownames, colnames))\nbarplot(as.matrix(resultsMatrix), beside=TRUE)\n```\n\n",
+    "created" : 1493052578179.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1627630653",
+    "id" : "578E2EBE",
+    "lastKnownWriteTime" : 1493681166,
+    "last_content_update" : 1493681166177,
+    "path" : "~/Desktop/UNCC_Spring_2017/BINF 3121 Biostat/Final_project/plants_saltstress_finalproject.Rmd",
+    "project_path" : "plants_saltstress_finalproject.Rmd",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
