@@ -86,7 +86,7 @@ Create a Venn Diagram:
 # lfc =1 for 2-fold changes
 result = decideTests(fit3, p.value=0.05, lfc=1)
 vennDiagram(result)
-#vennCounts(result)
+vennCounts(result)
 ```
 
 Venn Diagram key:
@@ -104,10 +104,9 @@ annots=annots[,c(1,5,6)] #Save selected (columns 1,5,6) info in annots table
 Select top genes from each comparison:
 ```{r}
 N=dim(eset)[1] 
-top.M6PR.TvU = topTable(fit2,coef=1,number=N,p.value=0.05) 
-top.COL.UvT = topTable(fit2,coef=2,number=N,p.value=0.05) 
-top.M6PRvCOL.T = topTable(fit2,coef=3,number=N,p.value=0.05) 
-top.M6PRvCOL.U = topTable(fit2,coef=4,number=N,p.value=0.05)
+top.M6PR.TvU = topTable(fit3,coef=1,number=N,p.value=0.05) 
+top.COL.UvT = topTable(fit3,coef=2,number=N,p.value=0.05) 
+top.Diff = topTable(fit3,coef=3,number=N,p.value=0.05) 
 ```
 
 Merge annotations with top lists:
@@ -115,9 +114,14 @@ Merge annotations with top lists:
 row.names(annots)=annots$array_element_name 
 top.M6PR.TvU.merged=merge(annots,top.M6PR.TvU,by="row.names") 
 top.COL.UvT.merged=merge(annots,top.COL.UvT,by="row.names") 
-top.M6PRvCOL.T.merged=merge(annots,top.M6PRvCOL.T,by="row.names") 
-top.M6PRvCOL.U.merged=merge(annots,top.M6PRvCOL.U,by="row.names")
+top.Diff.merged=merge(annots,top.Diff,by="row.names") 
 ```
 
-
+Count differently expressed genes:
+```{r}
+genes.M6PR.TvU = unique(top.M6PR.TvU.merged$locus)
+genes.COL.UvT = unique(top.COL.UvT.merged$locus)
+genes.Diff = unique(top.Diff.merged$locus)
+intersection = intersect(genes.COL.UvT,genes.M6PR.TvU)
+```
 
