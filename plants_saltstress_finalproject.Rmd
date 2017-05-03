@@ -59,6 +59,39 @@ upregulated = c(sum(result[,1]>0), sum(result[,2]>0), sum(result[,3]>0), sum(res
 downregulated = c(sum(result[,1]<0), sum(result[,2]<0), sum(result[,3]<0), sum(result[,4]<0))
 
 resultsMatrix = matrix(c(upregulated, downregulated), nrow=2, dimnames=list(rownames, colnames))
-barplot(as.matrix(resultsMatrix), beside=TRUE)
+barplot(as.matrix(resultsMatrix), legend = rownames, beside=TRUE)
 ```
+
+(A) Pathways mainly affected by salt stress; 
+(B) pathways mainly activated by the M6PR transgene; 
+(C) pathways affected by both salt stress and the M6PR transgene.
+
+
+
+
+Retrieve annotations
+```{r}
+f="ftp://ftp.arabidopsis.org/Microarrays/Affymetrix/affy_ATH1_array_elements-2010-12-20.txt" 
+annots = read.delim(f, na.strings = "", fill=TRUE, header=T, sep="\t") 
+annots=annots[,c(1,5,6)] #Save selected (columns 1,5,6) info in annots table
+```
+
+
+```{r}
+N=dim(eset)[1] 
+top.M6PR.TvU = topTable(fit2,coef=1,number=N,p.value=0.05) 
+top.COL.UvT = topTable(fit2,coef=2,number=N,p.value=0.05) 
+top.M6PRvCOL.T = topTable(fit2,coef=3,number=N,p.value=0.05) 
+top.M6PRvCOL.U = topTable(fit2,coef=4,number=N,p.value=0.05)
+```
+
+```{r}
+row.names(annots)=annots$array_element_name 
+top.M6PR.TvU.merged=merge(annots,top.M6PR.TvU,by="row.names") 
+top.COL.UvT.merged=merge(annots,top.COL.UvT,by="row.names") 
+top.M6PRvCOL.T.merged=merge(annots,top.M6PRvCOL.T,by="row.names") 
+top.M6PRvCOL.U.merged=merge(annots,top.M6PRvCOL.U,by="row.names")
+```
+
+
 
