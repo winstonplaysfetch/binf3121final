@@ -27,6 +27,7 @@ TS = paste(pd$genotype,pd$treatment,sep=".")
 TS = factor(TS, levels= c("M6PR.U","M6PR.T","COL.U","COL.T"))
 ```
 
+Create a design matrix:
 ```{r}
 exp_design = model.matrix(~0 + TS)
 colnames(exp_design) = levels(TS)
@@ -37,6 +38,7 @@ exp_design
 fit=lmFit(eset,exp_design)
 ```
 
+Functions for creating a bar graph:
 ```{r}
 cont.matrix= makeContrasts(
     M6PR.TvU = M6PR.U - M6PR.T,
@@ -48,7 +50,7 @@ fit2 = contrasts.fit(fit,cont.matrix)
 fit2 = eBayes(fit2)
 ```
 
-
+Create a bar graph:
 ```{r}
 # lfc =1 for 2-fold changes
 result = decideTests(fit2, p.value=0.05, lfc=1)
@@ -62,21 +64,44 @@ resultsMatrix = matrix(c(upregulated, downregulated), nrow=2, dimnames=list(rown
 barplot(as.matrix(resultsMatrix), legend = rownames, beside=TRUE)
 ```
 
-(A) Pathways mainly affected by salt stress; 
-(B) pathways mainly activated by the M6PR transgene; 
-(C) pathways affected by both salt stress and the M6PR transgene.
+Bar graph key:
+(A) Pathways mainly affected by salt stress; COL.UvT
+(B) pathways mainly activated by the M6PR transgene; M6PRvCOL.U
+(C) pathways affected by both salt stress and the M6PR transgene. M6PRvCOL.T
+(D) Pathways affected by the presence of the M6PR gene M6PR.TvU
 
+Functions for creating a venn diagram:
+```{r}
+cont.matrix2= makeContrasts(
+    M6PR.TvU = M6PR.U - M6PR.T,
+    COL.UvT = COL.U - COL.T, 
+    Diff = (M6PR.U - M6PR.T) - (COL.U - COL.T),
+    levels = exp_design)
+fit3 = contrasts.fit(fit,cont.matrix2)
+fit3 = eBayes(fit3)
+```
 
+Create a Venn Diagram:
+```{r}
+# lfc =1 for 2-fold changes
+result = decideTests(fit3, p.value=0.05, lfc=1)
+vennDiagram(result)
+#vennCounts(result)
+```
 
+Venn Diagram key:
+(A) Pathways mainly affected by salt stress; COL.UvT
+(B) Pathways mainly activated by the M6PR transgene; M6PRvCOL.U
+(C) Pathways affected by both salt stress and the M6PR transgene. diff
 
-Retrieve annotations
+Retreve annotations:
 ```{r}
 f="ftp://ftp.arabidopsis.org/Microarrays/Affymetrix/affy_ATH1_array_elements-2010-12-20.txt" 
 annots = read.delim(f, na.strings = "", fill=TRUE, header=T, sep="\t") 
 annots=annots[,c(1,5,6)] #Save selected (columns 1,5,6) info in annots table
 ```
 
-
+Select top genes from each comparison:
 ```{r}
 N=dim(eset)[1] 
 top.M6PR.TvU = topTable(fit2,coef=1,number=N,p.value=0.05) 
@@ -85,6 +110,7 @@ top.M6PRvCOL.T = topTable(fit2,coef=3,number=N,p.value=0.05)
 top.M6PRvCOL.U = topTable(fit2,coef=4,number=N,p.value=0.05)
 ```
 
+Merge annotations with top lists:
 ```{r}
 row.names(annots)=annots$array_element_name 
 top.M6PR.TvU.merged=merge(annots,top.M6PR.TvU,by="row.names") 
