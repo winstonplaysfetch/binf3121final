@@ -4,7 +4,20 @@ author: "Jennifer Daly, Micaela Beckman"
 date: "April 24, 2017"
 output: html_document
 ---
+INTRODUCTION
+Scientists attempt to prove that a gene M6RMA from celery, when included in arabidopsis, creates plants that are resistant to salt. The gene does this by changing the expression of multiple gene families. 
 
+In the paper, they used Bioconductor's GCRMA to normalize the data, AffyLimGUI to create p-values and linear plots of the data, and Matman to tie the probe sets to annotations. 
+If you were to attempt to re-create exactly how the data was analyzed in the paper, you would install Bioconductor and all packages as instructed in this link: http://bioconductor.org/install/
+
+In order to install and use AffyLimGUI, we attempted to follow the instructions on these pages:
+Basic install & run guide: http://bioinf.wehi.edu.au/affylmGUI/#install
+
+We were able to install all dependencies for AffyLimGUI on Windows, but when attempting to create a plot we got an error "Could not find function 'indexProbes'." We could not find proper help on this issue, so we decided to not use the GUI in our analysis. 
+
+A run-through of specific features using a data set: https://www.bioconductor.org/packages/release/bioc/vignettes/affylmGUI/inst/doc/estrogen/estrogen.html
+
+Begin Analysis, data import & normalization
 ```{r, message=FALSE, warning=F}
 #Required libraries
 library(affy)
@@ -17,31 +30,37 @@ pd = read.AnnotatedDataFrame("samples.txt",header=TRUE,sep=",",row.names=1)
 mydata = ReadAffy(filenames=pd$filename,phenoData=pd,verbose=TRUE)
 sampleNames(mydata)=row.names(pData(pd))
 #Call functions to organize data
-#found no significant difference between rma and gcrma but wanted to try to match the experimental methods
-eset = gcrma(mydata)
+eset_rma = rma(mydata)
+eset_gc = gcrma(mydata)
 expression_data = exprs(eset)
 ```
-COL.U1 has multiple blobs on it's image check.
 
-Histogram is not normal but we will normalize the data using eset.
+The difference between RMA and GCRMA is that GCRMA is based on a model using GC content first, while RMA uses a convolution model first for background correction. It is understood that this causes GCRMA to attain more accurate gene expression. 
+Reference: https://www.stat.berkeley.edu/~terry/Classes/s246.2006/Week10/Week10L1.pdf 
 
+*A Note: During our image check, we found that COL.U1 has multiple 'blobs'. We saw this on both computers and this may bias the results, but we are not sure in what way.* 
+
+Create a design matrix: Set column labels
 ```{r}
 TS = paste(pd$genotype,pd$treatment,sep=".")
 TS = factor(TS, levels= c("M6PR.U","M6PR.T","COL.U","COL.T"))
 ```
 
-Create a design matrix:
+Create a design matrix: Populate the columns by creating a list who's entries are 1/0 values based on the experiment names. 
 ```{r}
 exp_design = model.matrix(~0 + TS)
 colnames(exp_design) = levels(TS)
 exp_design
 ```
 
+Fit a linear model to the data:
+*This is where we would have used AffyLimGUI, had we be able to*
 ```{r}
-fit=lmFit(eset,exp_design)
+fit=lmFit(eset_rma,exp_design)
+gcfit=lmFit(eset_gc,exp_design)
 ```
 
-Functions for creating a bar graph:
+Functions for creating a bar graph with RMA normalization:
 ```{r}
 cont.matrix= makeContrasts(
     M6PR.TvU = M6PR.U - M6PR.T,
@@ -52,13 +71,22 @@ cont.matrix= makeContrasts(
 fit2 = contrasts.fit(fit,cont.matrix)
 fit2 = eBayes(fit2)
 ```
-When using GCRMA, we got the following error:
-"Zero sample variances detected, have been offset away from zero"
-The below link explains that for values with zero sample variances, the values for the test statistic have been slightly moved from zero.
 
-https://stat.ethz.ch/pipermail/bioconductor/2007-May/017025.html
+Functions for creating a bar graph with GCRMA normalization:
+```{r}
+cont.matrix2= makeContrasts(
+    M6PR.TvU = M6PR.U - M6PR.T,
+    COL.UvT = COL.U - COL.T,
+    M6PRvCOL.T = M6PR.T - COL.T,
+    M6PRvCOL.U = M6PR.U - COL.U,
+    levels = exp_design)
+gcfit2 = contrasts.fit(gcfit,cont.matrix2)
+gcfit2 = eBayes(gcfit2)
+```
 
-Create a bar graph:
+Upon running GCRMA, we get a warning message "Zero sample variences detected, have been offset away from zero". We found that it does this so that when using statistical tests we won't have zero values in the denominator which would cause infinite result values. Reference: https://stat.ethz.ch/pipermail/bioconductor/2007-May/017025.html
+
+Create a bar graph for the rma normalized data:
 ```{r}
 # lfc =1 for 2-fold changes
 result = decideTests(fit2, p.value=0.05, lfc=1)
@@ -72,37 +100,53 @@ resultsMatrix = matrix(c(upregulated, downregulated), nrow=2, dimnames=list(rown
 barplot(as.matrix(resultsMatrix), legend = rownames, beside=TRUE)
 ```
 
+Create a bar graph for the GCRMA normalized data:
+```{r}
+# lfc =1 for 2-fold changes
+gc_result = decideTests(gcfit2, p.value=0.05, lfc=1)
+
+gc_colnames = c("M6PR.TvU",	"COL.UvT",	"M6PRvCOL.T",	"M6PRvCOL.U")
+gc_rownames = c("upregulated", "downregulated")
+gc_upregulated = c(sum(gc_result[,1]>0), sum(gc_result[,2]>0), sum(gc_result[,3]>0), sum(gc_result[,4]>0))
+gc_downregulated = c(sum(gc_result[,1]<0), sum(gc_result[,2]<0), sum(gc_result[,3]<0), sum(gc_result[,4]<0))
+
+gc_resultsMatrix = matrix(c(gc_upregulated, gc_downregulated), nrow=2, dimnames=list(gc_rownames, gc_colnames))
+barplot(as.matrix(gc_resultsMatrix), legend = rownames, beside=TRUE)
+```
+
 Bar graph key:
 (A) Pathways mainly affected by salt stress; COL.UvT
 (B) pathways mainly activated by the M6PR transgene; M6PRvCOL.U
 (C) pathways affected by both salt stress and the M6PR transgene. M6PRvCOL.T
 (D) Pathways affected by the presence of the M6PR gene M6PR.TvU
 
+A major difference we see between our bar graph and theirs is the amount of up regulation. It is possible that when the data was offset from 0, this affected which genes were up/down regulated. 
+
 Functions for creating a venn diagram:
 ```{r}
-cont.matrix2= makeContrasts(
+cont.matrix3= makeContrasts(
     M6PR.TvU = M6PR.U - M6PR.T,
     COL.UvT = COL.U - COL.T, 
     Diff = (M6PR.U - M6PR.T) - (COL.U - COL.T),
     levels = exp_design)
-fit3 = contrasts.fit(fit,cont.matrix2)
-fit3 = eBayes(fit3)
+gcfit3 = contrasts.fit(gcfit,cont.matrix3)
+gcfit3 = eBayes(gcfit3)
 ```
 
-Create a Venn Diagram:
+Create a Venn Diagram for the GCRMA normalized data:
 ```{r}
 # lfc =1 for 2-fold changes
-result2 = decideTests(fit3, p.value=0.05, lfc=1)
-vennDiagram(result2)
-vennCounts(result2)
+gc_result2 = decideTests(fit3, p.value=0.05, lfc=1)
+vennDiagram(gc_result2)
+vennCounts(gc_result2)
 ```
 
 Venn Diagram key:
 (A) Pathways mainly affected by salt stress; COL.UvT
-(B) Pathways mainly activated by the M6PR transgene; M6PRvCOL.U
-(C) Pathways affected by both salt stress and the M6PR transgene. diff
+(B) Pathways mainly activated by the M6PR transgene; Differences between M6PR.TvU and COL.UvT (24, 20)
+(C) Pathways affected by both salt stress and the M6PR transgene; Diff
 
-Retreve annotations:
+Retrieve annotations:
 ```{r}
 f="ftp://ftp.arabidopsis.org/Microarrays/Affymetrix/affy_ATH1_array_elements-2010-12-20.txt" 
 annots = read.delim(f, na.strings = "", fill=TRUE, header=T, sep="\t") 
