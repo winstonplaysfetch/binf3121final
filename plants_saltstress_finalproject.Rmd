@@ -10,12 +10,15 @@ output: html_document
 library(affy)
 library(limma)
 library(RSQLite)
+library(gcrma)
+
 #Import data from sources
 pd = read.AnnotatedDataFrame("samples.txt",header=TRUE,sep=",",row.names=1) 
 mydata = ReadAffy(filenames=pd$filename,phenoData=pd,verbose=TRUE)
 sampleNames(mydata)=row.names(pData(pd))
 #Call functions to organize data
-eset = rma(mydata)
+#found no significant difference between rma and gcrma but wanted to try to match the experimental methods
+eset = gcrma(mydata)
 expression_data = exprs(eset)
 ```
 COL.U1 has multiple blobs on it's image check.
@@ -49,6 +52,11 @@ cont.matrix= makeContrasts(
 fit2 = contrasts.fit(fit,cont.matrix)
 fit2 = eBayes(fit2)
 ```
+When using GCRMA, we got the following error:
+"Zero sample variances detected, have been offset away from zero"
+The below link explains that for values with zero sample variances, the values for the test statistic have been slightly moved from zero.
+
+https://stat.ethz.ch/pipermail/bioconductor/2007-May/017025.html
 
 Create a bar graph:
 ```{r}
@@ -125,3 +133,4 @@ genes.Diff = unique(top.Diff.merged$locus)
 intersection = intersect(genes.COL.UvT,genes.M6PR.TvU)
 ```
 
+AffylmGUI or Bioconductor packages returned multiple error messages.  Because there was a lack of documentation to resolve the errors we decided to use Affy and limma for data analysis.
