@@ -170,6 +170,7 @@ Venn Diagram key:
 In our analysis, there are thousands more expressed genes than the paper included in their analysis. We assume that this is because we could not use AffyLimGUI. We used the same data-choosing methods used in the paper, we only included probe sets with a p-value higher than 0.05 and greater than 2 log-fold change. 
 
 Retrieve annotations:
+#So that we can go by the gene's actual name instead of probe-set number
 ```{r}
 f="ftp://ftp.arabidopsis.org/Microarrays/Affymetrix/affy_ATH1_array_elements-2010-12-20.txt" 
 annots = read.delim(f, na.strings = "", fill=TRUE, header=T, sep="\t") 
@@ -205,9 +206,18 @@ intersection = intersect(genes.COL.UvT,genes.M6PR.TvU)
 
 CONCLUSION:
 
+H0: Our results are synonymous with the paper, group A has a lower number of affected genes than any other group. 
+Specifically, they found that in the paper the control plants had a huge difference in gene expression when treated with salt because it may be exhibiting both defensive and adaptive responses. Naturally, it would follow that when a plant posesses the M6PR gene it exhibits very little genetic changes because it may be more effecient at defending against a high salt environment. The genes that showed difference in expression between both the presence of salt and the presence of the M6PR gene (our group: Diff) is likely high because the "protective effect" of the M6PR gene was different than the defensive response in the presence of salt, as if when wild type plants were exposed to salt they just tried everything, but the M6PR gene presented a different, more effecient way of coping with the salt environment. 
 
 
 
+Ha: Our results differ from the paper in some way. 
+
+```{r}
+ours=c(162/5252, 3996/5252, 1094/5252)
+theirs=c(764/5511,3239/5511,1039/5511)
+```
+*Note: their M6Pr.100mM-v-col-100mM column is akin to our 'Diff' column.*
 
 
 
