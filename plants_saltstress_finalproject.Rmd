@@ -84,9 +84,9 @@ fit3 = eBayes(fit3)
 Create a Venn Diagram:
 ```{r}
 # lfc =1 for 2-fold changes
-result = decideTests(fit3, p.value=0.05, lfc=1)
-vennDiagram(result)
-vennCounts(result)
+result2 = decideTests(fit3, p.value=0.05, lfc=1)
+vennDiagram(result2)
+vennCounts(result2)
 ```
 
 Venn Diagram key:
@@ -102,6 +102,7 @@ annots=annots[,c(1,5,6)] #Save selected (columns 1,5,6) info in annots table
 ```
 
 Select top genes from each comparison:
+#Select the most sigificantly different genes. 
 ```{r}
 N=dim(eset)[1] 
 top.M6PR.TvU = topTable(fit3,coef=1,number=N,p.value=0.05) 
@@ -110,14 +111,16 @@ top.Diff = topTable(fit3,coef=3,number=N,p.value=0.05)
 ```
 
 Merge annotations with top lists:
+#So that we have annotation names instead of probe set numbers. 
 ```{r}
 row.names(annots)=annots$array_element_name 
-top.M6PR.TvU.merged=merge(annots,top.M6PR.TvU,by="row.names") 
-top.COL.UvT.merged=merge(annots,top.COL.UvT,by="row.names") 
-top.Diff.merged=merge(annots,top.Diff,by="row.names") 
+top.COL.UvT.merged=merge(annots,top.COL.UvT,by="row.names") #(A) Pathways mainly affected by salt stress
+top.M6PR.TvU.merged=merge(annots,top.M6PR.TvU,by="row.names") #(B) Pathways mainly activated by the M6PR transgene
+top.Diff.merged=merge(annots,top.Diff,by="row.names") #(C) Pathways affected by both salt stress and the M6PR transgene
 ```
 
 Count differently expressed genes:
+#because there may be multiple probe sets to one gene (annotation)
 ```{r}
 genes.M6PR.TvU = unique(top.M6PR.TvU.merged$locus)
 genes.COL.UvT = unique(top.COL.UvT.merged$locus)
