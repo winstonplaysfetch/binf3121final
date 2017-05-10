@@ -5,7 +5,19 @@ date: "April 24, 2017"
 output: html_document
 ---
 INTRODUCTION
-Scientists attempt to prove that a gene M6RMA from celery, when included in arabidopsis, creates plants that are resistant to salt. The gene does this by changing the expression of multiple gene families. 
+In this experiment, Arabidopsis plants were transformed with the mannose-6-phosphate reductase (M6PR) gene from celery. These plants were observed to be more salt tolerant. They exibited reduced salt injury, had more vegitative growth and more seed production in the presence of salt than the wild-type (COL) plants. 
+
+In the presence of salt, many fewer gene differences were measured between M6PR and wild type (col) plants, this suggests that the M6PR gene was successful in pre-conditioning these plants to salt. In the untreated plants, many more genes were differently expressed. 
+
+If in our analysis, these results are the same in that in the presence of salt less genes show differences, we can conclude that the original paper is accurate. 
+
+To measure this, we will define three groups: 
+(A) Pathways mainly affected by salt stress
+(B) Pathways mainly activated by the M6PR transgene
+(C) Pathways affected by both salt stress and the M6PR transgene
+
+H0: Our results are synonymous with the paper, group A has a lower number of affected genes than any other group. 
+Ha: Our results differ from the paper in some way. 
 
 In the paper, they used Bioconductor's GCRMA to normalize the data, AffyLimGUI to create p-values and linear plots of the data, and Matman to tie the probe sets to annotations. 
 If you were to attempt to re-create exactly how the data was analyzed in the paper, you would install Bioconductor and all packages as instructed in this link: http://bioconductor.org/install/
