@@ -20,15 +20,17 @@ H0: Our results are synonymous with the paper, group A has a lower number of aff
 Ha: Our results differ from the paper in some way. 
 
 In the paper, they used Bioconductor's GCRMA to normalize the data, AffyLimGUI to create p-values and linear plots of the data, and Matman to tie the probe sets to annotations. 
+
 If you were to attempt to re-create exactly how the data was analyzed in the paper, you would install Bioconductor and all packages as instructed in this link: http://bioconductor.org/install/
 
 In order to install and use AffyLimGUI, we attempted to follow the instructions on these pages:
 Basic install & run guide: http://bioinf.wehi.edu.au/affylmGUI/#install
 
-We were able to install all dependencies for AffyLimGUI on Windows, but when attempting to create a plot we got an error "Could not find function 'indexProbes'." We could not find proper help on this issue, so we decided to not use the GUI in our analysis. 
-
 A run-through of specific features using a data set: https://www.bioconductor.org/packages/release/bioc/vignettes/affylmGUI/inst/doc/estrogen/estrogen.html
 
+We were able to install all dependencies for AffyLimGUI on Windows, but when attempting to create a plot we got an error "Could not find function 'indexProbes'." We could not find proper help on this issue, so we decided to not use the GUI in our analysis. We were still able to use GCRMA for normalization in our analysis, and we chose to use both GCRMA and RMA to compare. 
+
+ANALYSIS:
 Begin Analysis, data import & normalization
 ```{r, message=FALSE, warning=F}
 #Required libraries
@@ -72,6 +74,8 @@ fit=lmFit(eset_rma,exp_design)
 gcfit=lmFit(eset_gc,exp_design)
 ```
 
+We chose to begin our analysis with a bar graph representation of the data because it was easier to compare with the original paper this way. In our bar graphs, the GCRMA graph is more similar than the RA graph in that the control untreated vs treated has the highest differences in gene expression, and the M6PR treated vs. untreated has the lowest. This is synonymous with the paper's conclusions that this gene pre-conditions the plant to salt, and so in the presense of salt, the plant exibits less differences in gene expression. 
+
 Functions for creating a bar graph with RMA normalization:
 ```{r}
 cont.matrix= makeContrasts(
@@ -112,6 +116,9 @@ resultsMatrix = matrix(c(upregulated, downregulated), nrow=2, dimnames=list(rown
 barplot(as.matrix(resultsMatrix), legend = rownames, beside=TRUE)
 ```
 
+This bar graph result is very different from the paper. The two treated groups contain the highest amount of varience, suggesting that the M6PR salt-resistance gene had no effect. 
+Figure for reference: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192998/figure/fig5/
+
 Create a bar graph for the GCRMA normalized data:
 ```{r}
 # lfc =1 for 2-fold changes
@@ -127,12 +134,14 @@ barplot(as.matrix(gc_resultsMatrix), legend = rownames, beside=TRUE)
 ```
 
 Bar graph key:
-(A) Pathways mainly affected by salt stress; COL.UvT
-(B) pathways mainly activated by the M6PR transgene; M6PRvCOL.U
-(C) pathways affected by both salt stress and the M6PR transgene. M6PRvCOL.T
-(D) Pathways affected by the presence of the M6PR gene M6PR.TvU
+(A) Pathways mainly affected by salt stress: COL.UvT
+(B) pathways mainly activated by the M6PR transgene: M6PRvCOL.U
+(C) pathways affected by both salt stress and the M6PR transgene: M6PRvCOL.T
+(D) Pathways affected by the presence of the M6PR gene: M6PR.TvU
 
-A major difference we see between our bar graph and theirs is the amount of up regulation. It is possible that when the data was offset from 0, this affected which genes were up/down regulated. 
+This bar graph result was a close match to the results show in the paper. A major difference we see between our bar graph and theirs is the amount of up regulation. It is possible that when the data was offset from 0 it affected how we measure up or down regulated genes. If the values were offset from 0 and we are determining up or down regulation by variation from 0, then the actual amount of up/down regulated genes is different from what we see here. 
+
+We chose to only include the GCRMA data in the venn diagram analysis because this method of normalization is more accurate, and it is a closer fit to the paper's data. 
 
 Functions for creating a venn diagram:
 ```{r}
@@ -157,6 +166,8 @@ Venn Diagram key:
 (A) Pathways mainly affected by salt stress; COL.UvT
 (B) Pathways mainly activated by the M6PR transgene; Differences between M6PR.TvU and COL.UvT (24, 20)
 (C) Pathways affected by both salt stress and the M6PR transgene; Diff
+
+In our analysis, there are thousands more expressed genes than the paper included in their analysis. We assume that this is because we could not use AffyLimGUI. We used the same data-choosing methods used in the paper, we only included probe sets with a p-value higher than 0.05 and greater than 2 log-fold change. 
 
 Retrieve annotations:
 ```{r}
@@ -192,4 +203,15 @@ genes.Diff = unique(top.Diff.merged$locus)
 intersection = intersect(genes.COL.UvT,genes.M6PR.TvU)
 ```
 
-AffylmGUI or Bioconductor packages returned multiple error messages.  Because there was a lack of documentation to resolve the errors we decided to use Affy and limma for data analysis.
+CONCLUSION:
+
+
+
+
+
+
+
+
+
+
+
