@@ -6,6 +6,7 @@ output: html_document
 ---
 
 **INTRODUCTION**
+
 In this experiment, Arabidopsis plants were transformed with the mannose-6-phosphate reductase (M6PR) gene from celery. These plants were observed to be more salt tolerant. They exibited reduced salt injury, had more vegetative growth and more seed production in the presence of salt than the wild-type (COL) plants. 
 
 In the presence of salt, many fewer gene differences were measured between M6PR and wild type (col) plants, this suggests that the M6PR gene was successful in pre-conditioning these plants to salt. In the untreated plants, many more genes were differently expressed. 
@@ -22,7 +23,7 @@ Ha: Our results differ from the paper in some way.
 
 In the paper, they used Bioconductor's GCRMA to normalize the data, AffyLimGUI to create p-values and linear plots of the data, and Mapman to tie the probe sets to annotations. 
 
-If you were to attempt to re-create exactly how the data was analyzed in the paper, you would install Bioconductor and all packages as instructed in this link: http://bioconductor.org/install/
+For this paper, we installed and used libraries from Bioconductor. These are instructions on how to install Bioconductor: http://bioconductor.org/install/
 
 In order to install and use AffyLimGUI, we attempted to follow the instructions on these pages:
 Basic install & run guide: http://bioinf.wehi.edu.au/affylmGUI/#install
@@ -31,7 +32,10 @@ A run-through of specific features in AffyLIMGUI using a data set: https://www.b
 
 We were able to install all dependencies for AffyLimGUI on Windows, but when attempting to create a plot we got an error "Could not find function 'indexProbes'." We could not find proper help on this issue, so we decided to not use the GUI in our analysis. We were still able to use GCRMA for normalization in our analysis, and we chose to use both GCRMA and RMA to compare. 
 
-ANALYSIS:
+*For this paper, we are not using AffyLimGUI*
+
+**ANALYSIS:**
+
 Begin Analysis, data import & normalization
 ```{r, message=FALSE, warning=F}
 #Required libraries
@@ -50,26 +54,25 @@ eset_gc = gcrma(mydata)
 expression_data = exprs(eset_gc)
 ```
 
-The difference between RMA and GCRMA is that GCRMA is based on a model using GC content first, while RMA uses a convolution model first for background correction. It is understood that this causes GCRMA to attain more accurate gene expression. 
-Reference: https://www.stat.berkeley.edu/~terry/Classes/s246.2006/Week10/Week10L1.pdf 
+The difference between RMA and GCRMA is that GCRMA is based on a model using GC content first, while RMA uses a convolution model first for background correction. It is understood that this causes GCRMA to attain more accurate gene expression. [Reference](https://www.stat.berkeley.edu/~terry/Classes/s246.2006/Week10/Week10L1.pdf ) 
 
 *A Note: During our image check, we found that COL.U1 has multiple 'blobs'. We saw this on both computers and this may bias the results, but we are not sure in what way.* 
 
-Create a design matrix: Set column labels
+**Create a design matrix:** 
 ```{r}
+#Set column labels
 TS = paste(pd$genotype,pd$treatment,sep=".")
 TS = factor(TS, levels= c("M6PR.U","M6PR.T","COL.U","COL.T"))
-```
 
-Create a design matrix: Populate the columns by creating a list who's entries are 1/0 values based on the experiment names. 
-```{r}
+#Populate the columns by creating a list who's entries are 1/0 values based on the experiment names. 
 exp_design = model.matrix(~0 + TS)
 colnames(exp_design) = levels(TS)
 exp_design
 ```
 
-Fit a linear model to the data:
-*This is where we would have used AffyLimGUI, had we be able to*
+
+**Fit a linear model to the data:**
+*This is where we would have used AffyLimGUI, had we been able to*
 ```{r}
 fit=lmFit(eset_rma,exp_design)
 gcfit=lmFit(eset_gc,exp_design)
@@ -101,9 +104,10 @@ gcfit2 = contrasts.fit(gcfit,cont.matrix2)
 gcfit2 = eBayes(gcfit2)
 ```
 
-Upon running GCRMA, we get a warning message "Zero sample variences detected, have been offset away from zero". We found that it does this so that when using statistical tests we won't have zero values in the denominator which would cause infinite result values. Reference: https://stat.ethz.ch/pipermail/bioconductor/2007-May/017025.html
+Upon running GCRMA, we get a warning message "Zero sample variences detected, have been offset away from zero". We found that it does this so that when using statistical tests we won't have zero values in the denominator which would cause infinite result values. [Reference](https://stat.ethz.ch/pipermail/bioconductor/2007-May/017025.html)
 
-Create a bar graph for the rma normalized data:
+
+**Create a bar graph for the rma normalized data**
 ```{r}
 # lfc =1 for 2-fold changes
 result = decideTests(fit2, p.value=0.05, lfc=1)
@@ -118,9 +122,10 @@ barplot(as.matrix(resultsMatrix), legend = rownames, beside=TRUE)
 ```
 
 This bar graph result is very different from the paper. The two treated groups contain the highest amount of variance, suggesting that the M6PR salt-resistance gene had no effect. 
-Figure for reference: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192998/figure/fig5/
+[Figure for reference](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192998/figure/fig5/)
 
-Create a bar graph for the GCRMA normalized data:
+
+**Create a bar graph for the GCRMA normalized data**
 ```{r}
 # lfc =1 for 2-fold changes
 gc_result = decideTests(gcfit2, p.value=0.05, lfc=1)
@@ -134,7 +139,8 @@ gc_resultsMatrix = matrix(c(gc_upregulated, gc_downregulated), nrow=2, dimnames=
 barplot(as.matrix(gc_resultsMatrix), legend = gc_rownames, beside=TRUE)
 ```
 
-Bar graph key:
+**Bar graph key:**
+
 (A) Pathways mainly affected by salt stress: COL.UvT
 (B) pathways mainly activated by the M6PR transgene: M6PRvCOL.U
 (C) pathways affected by both salt stress and the M6PR transgene: M6PRvCOL.T
@@ -144,7 +150,8 @@ This bar graph result was a close match to the results shown in the paper. A maj
 
 We chose to only include the GCRMA data in the venn diagram analysis because this method of normalization is more accurate, and it is a closer fit to the paper's data. 
 
-Functions for creating a venn diagram:
+
+**Create a Venn Diagram for the GCRMA normalized data**
 ```{r}
 cont.matrix3= makeContrasts(
     M6PR.TvU = M6PR.U - M6PR.T,
@@ -153,33 +160,30 @@ cont.matrix3= makeContrasts(
     levels = exp_design)
 gcfit3 = contrasts.fit(gcfit,cont.matrix3)
 gcfit3 = eBayes(gcfit3)
-```
 
-Create a Venn Diagram for the GCRMA normalized data:
-```{r}
 # lfc =1 for 2-fold changes
 gc_result2 = decideTests(gcfit3, p.value=0.05, lfc=1)
 vennDiagram(gc_result2)
 #vennCounts(gc_result2)
 ```
 
-Venn Diagram key:
+**Venn Diagram key:**
+
 (A) Pathways mainly affected by salt stress; COL.UvT
 (B) Pathways mainly activated by the M6PR transgene; Differences between M6PR.TvU and COL.UvT (24, 20)
 (C) Pathways affected by both salt stress and the M6PR transgene; Diff
 
 In our analysis, we got about the same amount of expressed genes as they did.  
 
-Retrieve annotations:
-#So that we can go by the gene's actual name instead of probe-set number
+**Retrieve annotations, select top genes and account for multiple probe sets of the same gene**
+*Below are functions to calculate top lists with both the venDiagram categories and the bargraph, in the conclusion we only used the numbers from the bargraph so that we could more accurately see how our results compared to the paper, but both sets of numbers are useful*
 ```{r}
 f="ftp://ftp.arabidopsis.org/Microarrays/Affymetrix/affy_ATH1_array_elements-2010-12-20.txt" 
 annots = read.delim(f, na.strings = "", fill=TRUE, header=T, sep="\t") 
 annots=annots[,c(1,5,6)] #Save selected (columns 1,5,6) info in annots table
 ```
 
-Select top genes from each comparison:
-#Select the most sigificantly different genes. 
+*Select the most sigificantly different genes. *
 ```{r}
 N=dim(eset_gc)[1] 
 #VennDiagram
@@ -193,8 +197,7 @@ top.M6PRvCOL.T = topTable(gcfit2,coef=3,number=N,p.value=0.05)
 top.M6PRvCOL.U = topTable(gcfit2,coef=4,number=N,p.value=0.05) 
 ```
 
-Merge annotations with top lists:
-#So that we have annotation names instead of probe set numbers. 
+*Merge annotations with top lists:*
 ```{r}
 row.names(annots)=annots$array_element_name 
 #Venn Diagram
@@ -208,8 +211,7 @@ top.M6PRvCOL.T.merged = merge(annots,top.M6PRvCOL.T,by="row.names") #(C) pathway
 top.M6PRvCOL.U.merged = merge(annots,top.M6PRvCOL.U,by="row.names") #(D) Pathways affected by the presence of the M6PR gene
 ```
 
-Count differently expressed genes:
-#because there may be multiple probe sets to one gene (annotation)
+*Account for multiple probe sets to one gene*
 ```{r}
 #VennDiagram
 #genes.M6PR.TvU = unique(top.M6PR.TvU.merged$locus)
@@ -223,48 +225,76 @@ genes.M6PRvCOL.T = unique(top.M6PRvCOL.T.merged$locus) #37
 genes.M6PRvCOL.U = unique(top.M6PRvCOL.U.merged$locus) #1553
 ```
 
-CONCLUSION:
+**CONCLUSION:**
 
-H0: Our results are synonymous with the paper, group A has a lower number of affected genes than any other group. 
-Ha: Our results differ from the paper in some way. 
+*H0: Our results are synonymous with the paper, group A has a lower number of affected genes than any other group. *
+
+*Ha: Our results differ from the paper in some way. *
 
 Specifically, they found that in the paper the control plants had a huge difference in gene expression when treated with salt because it may be exhibiting both defensive and adaptive responses. Naturally, it would follow that when a plant posesses the M6PR gene it exhibits very little genetic changes because it may be more efficient at defending against a high salt environment. The genes that showed difference in expression between both the presence of salt and the presence of the M6PR gene (our group: Diff) is likely high because the "protective effect" of the M6PR gene was different than the defensive response in the presence of salt, as if when wild type plants were exposed to salt they just tried everything, but the M6PR gene presented a different, more effecient way of coping with the salt environment. 
 
 Their results:
+
 (A) Genes that showed a difference in wild-type salt stressed plants: 3239
+
 (B) The genes that showed a difference in salt-stressed M6PR plants: 764
+
 (C) Genes that showed a difference between salt stressed and M6PR gene: 1039
+
 (D) The number of genes that showed a difference between the control and M6PR plants in untreated: 2272
-Reference: fig 5
+
+[Figure for reference](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192998/figure/fig5/)
 
 Our results:
+
 (A) Pathways mainly affected by salt stress: 1224
+
 (B) pathways mainly activated by the M6PR transgene: 30
+
 (C) pathways affected by both salt stress and the M6PR transgene: 37
+
 (D) Pathways affected by the presence of the M6PR gene: 1553
 
 Without a statistical test (one could not be made, as the groups presented in the paper were not mutually exlusive and our groups were), There is a significant difference in the total amount of genes differently expressed, but not a siginificant differents in what category they were differently expressed in. For example, the category with the lowest amount of differently expressed genes in the paper was B, and this was reflected in our results. 
 
+
+
 Our conclusions concerning genetic pathways:
+
 None of the mentioned genes in the paper reflected genes found in the top five largest/smallest LogFC values in each of our categories. However, there were some similarities in which genes were presented in each category. Below is a list of the genes mentioned in the paper, and how/where they ranked in our findings: 
 
 [AT5G20250 [Raffinose synthesis; Hydrolase family]: This gene was found in col.UvT at -5 logFC
+
 [AT4G36670 [Putative mannitol transport gene (MTD)]]: Found in col.UvT at -2 logFC
+
 [AT1G60590;AT1G48100 [Pectin lyase-like superfamily protein]: AT1G48100 was found in col.UvT at 2.8 logFC, AT1G60590 was found in M6PRvsCOL.U at -5 logFC. 
+
 [AT4G39330 [Putative mannitol transport gene]: Found in M6PRvCOL.U at -1.6 logFC
+
 [AT1G23870;AT2G18700;AT1G70290;AT4G22590;AT1G06410;AT4G29770;AT5G51460 [Trehalose biosynthesis-related genes]: Most found in M6PRvCOL.U
+
 [AT5G20250 [Raffinose synthesis; Hydrolase family]: Found in M6PRvCOL.U at 8.8 logFC
+
 [AT1G10550;AT2G01850 [Xyloglucan xyloglucosyl transerase (XXT) genes, cell elongation]: AT2G01850 found in M6PRvCOL.U at 1.8 logFC
+
 [AT1G32170;AT5G57550 [Xyloglucan endotransglycosylase-related proteins(XET), cell wall modification]: Found in M6PRvCOL.U at about 4 logFC
+
 [AT5G49360;AT1G02640 [Glycosyl hydrolase family 3; seed devleopment, carbohydrate metabolic process]:Found in M6PRvCOL.U at about 4 logFC
 
-A list of the top five genes we found in each category can be found in the text document: Top_five_genes_each_category.txt
-A list of all the genes mentioned in the paper can be found in the document: Genes_mentioned_in_paper.txt
+*A list of the top five genes we found in each category can be found in the text document: Top_five_genes_each_category.txt*
+
+*A list of all the genes mentioned in the paper can be found in the document: Genes_mentioned_in_paper.txt*
+
+
 
 All of the genes mentioned in the paper fell into three categories: 
+
 - Not significantly different in any of our categories
+
 - Show to be different between control and M6PR untreated plants
+
 - Shown to be different between control plants treated and untreated. 
+
 
 Between us and the publication, we fail to agree on the specific pathways that the M6PR gene uses to pre-condition the plant to salt, but we do agree that this gene is effective in pre-conditioning the plants to salt. We can see that it is effective because in both analysis' we see that the category M6PR.TvU has the lowest amount of affected genes, in the paper this meant that the plant did not have to work as hard to be resistant to salt when it posessed the M6PR gene. 
 
