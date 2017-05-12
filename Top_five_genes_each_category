@@ -1,0 +1,57 @@
+Top five genes of each category:
+COL.UvT: 
+up:
+[AT4G08300 nodulin MtN21 /EamA-like transporter family protein],
+[AT2G21560 unknown protein; BEST Arabidopsis thaliana protein m],
+[AT1G20070 unknown protein; FUNCTIONS IN: molecular_function u],
+[AT4G10500 2-oxoglutarate (2OG) and Fe(II)-dependent oxygenase superfamily protein],
+[AT5G42760 Leucine carboxyl methyltransferase]
+down:
+[AT5G57560 Xyloglucan endotransglucosylase/hydrolase family prot],
+[AT3G02480 Late embryogenesis abundant protein (LEA) family pr],
+[AT1G57990;AT1G57980 [AT1G57990, purine permease 18];[AT1G57980, Nucleotide-sugar transporter family protein]],
+[AT3G45970 expansin-like A1],
+[AT4G34410 redox responsive transcription factor 1]
+
+M6PR.TvU:  
+up:
+[AT4G39070; B-box zinc finger family protein],
+[AT4G25110; metacaspase 2],
+[AT4G35180; LYS/HIS transporter 7],
+[AT2G40330; PYR1-like 6],
+[AT5G62865; unknown protein; BEST Arabidopsis thaliana protein]
+down:
+AT5G45340 cytochrome P450, family 707, subfamily A, polypeptide 3, 
+AT2G16800 high-affinity nickel-transport family protein,
+AT1G63440 heavy metal atpase 5,
+AT1G11740 ankyrin repeat family protein
+AT1G02620 Ras-related small GTP-binding family protein
+
+
+M6PRvCOL.T: 
+up:
+AT1G78450 SOUL heme-binding family protein
+AT3G19850 Phototropic-responsive NPH3 family protein
+AT5G37710 alpha/beta-Hydrolases superfamily protein
+AT3G06070 unknown protein; BEST Arabidopsis thaliana protein m
+AT1G34760 general regulatory factor 11
+down:
+[AT3G46660 UDP-glucosyl transferase 76E12], 
+[AT2G38380, Peroxidase superfamily protein];[AT2G38390, Peroxidase superfamily protein], 
+[AT4G25490 C-repeat/DRE binding factor 1], 
+[AT5G33370; GDSL-like Lipase/Acylhydrolase superfamily protein], 
+[AT1G17830 Protein of unknown function (DUF789)]
+
+M6PRvCOL.U: 
+up:
+[AT5G57560 Xyloglucan endotransglucosylase/hydrolase family ],
+[AT3G45970 expansin-like A1], 
+[AT3G15630 unknown protein; FUNCTIONS IN: molecular_function unknown; INVOLVED IN: biological_process unknown; LOCATED IN: chloroplast; EXPRESSED IN: 24 plant structures; EXPRESSED DURING: 15 growth stages; BEST Arabidopsis thaliana protein match is: unknown protein (TAIR:AT1G52720.1); Has 61 Blast hits to 61 proteins in 13 species: Archae - 0; Bacteria - 0; Metazoa - 0; Fungi - 0; Plants - 61; Viruses - 0; Other Eukaryotes - 0 (source: NCBI BLink).],
+[AT3G48360 BTB and TAZ domain protein 2],
+[AT1G57990;AT1G57980 [AT1G57990, purine permease 18];[AT1G57980, Nucleotide-sugar transporter family protein]]
+down:
+[AT1G03940;AT1G03495 [AT1G03940, HXXXD-type acyl-transferase family protein];[AT1G03495, HXXXD-type acyl-transferase family protein],
+[AT4G14090 UDP-Glycosyltransferase superfamily protein],
+[AT1G60590 Pectin lyase-like superfamily protein],
+[AT4G24960 HVA22 homologue D],
+[AT2G27420 Cysteine proteinases superfamily protein]

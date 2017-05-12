@@ -224,6 +224,7 @@ genes.M6PRvCOL.U = unique(top.M6PRvCOL.U.merged$locus) #1553
 CONCLUSION:
 
 H0: Our results are synonymous with the paper, group A has a lower number of affected genes than any other group. 
+Ha: Our results differ from the paper in some way. 
 
 Specifically, they found that in the paper the control plants had a huge difference in gene expression when treated with salt because it may be exhibiting both defensive and adaptive responses. Naturally, it would follow that when a plant posesses the M6PR gene it exhibits very little genetic changes because it may be more efficient at defending against a high salt environment. The genes that showed difference in expression between both the presence of salt and the presence of the M6PR gene (our group: Diff) is likely high because the "protective effect" of the M6PR gene was different than the defensive response in the presence of salt, as if when wild type plants were exposed to salt they just tried everything, but the M6PR gene presented a different, more effecient way of coping with the salt environment. 
 
@@ -234,120 +235,38 @@ Their results:
 (D) The number of genes that showed a difference between the control and M6PR plants in untreated: 2272
 Reference: fig 5
 
-Ha: Our results differ from the paper in some way. 
-
 Our results:
 (A) Pathways mainly affected by salt stress: 1224
 (B) pathways mainly activated by the M6PR transgene: 30
 (C) pathways affected by both salt stress and the M6PR transgene: 37
 (D) Pathways affected by the presence of the M6PR gene: 1553
 
-Top five genes of each category:
-COL.UvT: 
-up:
-[AT4G08300
-nodulin MtN21 /EamA-like transporter family protein],
-[AT2G21560
-unknown protein; BEST Arabidopsis thaliana protein m],
-[AT1G20070
-unknown protein; FUNCTIONS IN: molecular_function u],
-[AT4G10500
-2-oxoglutarate (2OG) and Fe(II)-dependent oxygenase superfamily protein],
-[AT5G42760
-Leucine carboxyl methyltransferase]
-down:
-[AT5G57560
-Xyloglucan endotransglucosylase/hydrolase family prot],
-[AT3G02480
-Late embryogenesis abundant protein (LEA) family pr],
-[AT1G57990;AT1G57980
-[AT1G57990, purine permease 18];[AT1G57980, Nucleotide-sugar transporter family protein]],
-[AT3G45970
-expansin-like A1],
-[AT4G34410
-redox responsive transcription factor 1]
-
-M6PR.TvU:  
-up:
-[AT4G39070; B-box zinc finger family protein],
-[AT4G25110; metacaspase 2],
-[AT4G35180; LYS/HIS transporter 7],
-[AT2G40330; PYR1-like 6],
-[AT5G62865; unknown protein; BEST Arabidopsis thaliana protein]
-down:
-AT5G45340 cytochrome P450, family 707, subfamily A, polypeptide 3, 
-AT2G16800 high-affinity nickel-transport family protein,
-AT1G63440 heavy metal atpase 5,
-AT1G11740 ankyrin repeat family protein
-AT1G02620 Ras-related small GTP-binding family protein
+```{r}
+```
 
 
-M6PRvCOL.T: 
-up:
-AT1G78450
-SOUL heme-binding family protein
-AT3G19850
-Phototropic-responsive NPH3 family protein
-AT5G37710
-alpha/beta-Hydrolases superfamily protein
-AT3G06070
-unknown protein; BEST Arabidopsis thaliana protein m
-AT1G34760
-general regulatory factor 11
-down:
-[AT3G46660 UDP-glucosyl transferase 76E12], 
-[AT2G38380, Peroxidase superfamily protein];[AT2G38390, Peroxidase superfamily protein], 
-[AT4G25490 C-repeat/DRE binding factor 1], 
-[AT5G33370; GDSL-like Lipase/Acylhydrolase superfamily protein], 
-[AT1G17830 Protein of unknown function (DUF789)]
+Our conclusions concerning genetic pathways:
+None of the mentioned genes in the paper reflected genes found in the top five largest/smallest LogFC values in each of our categories. However, there were some similarities in which genes were presented in each category. Below is a list of the genes mentioned in the paper, and how/where they ranked in our findings: 
 
-M6PRvCOL.U: 
-up:
-[AT5G57560 Xyloglucan endotransglucosylase/hydrolase family ],
-[AT3G45970 expansin-like A1],
-[AT3G15630 unknown protein; FUNCTIONS IN: molecular_function unknown; INVOLVED IN: biological_process unknown; LOCATED IN: chloroplast; EXPRESSED IN: 24 plant structures; EXPRESSED DURING: 15 growth stages; BEST Arabidopsis thaliana protein match is: unknown protein (TAIR:AT1G52720.1); Has 61 Blast hits to 61 proteins in 13 species: Archae - 0; Bacteria - 0; Metazoa - 0; Fungi - 0; Plants - 61; Viruses - 0; Other Eukaryotes - 0 (source: NCBI BLink).],
-[AT3G48360 BTB and TAZ domain protein 2],
-[AT1G57990;AT1G57980 [AT1G57990, purine permease 18];[AT1G57980, Nucleotide-sugar transporter family protein]]
-down:
-[AT1G03940;AT1G03495 [AT1G03940, HXXXD-type acyl-transferase family protein];[AT1G03495, HXXXD-type acyl-transferase family protein],
-[AT4G14090
-UDP-Glycosyltransferase superfamily protein],
-[AT1G60590
-Pectin lyase-like superfamily protein],
-[AT4G24960
-HVA22 homologue D],
-[AT2G27420
-Cysteine proteinases superfamily protein]
+[AT5G20250 [Raffinose synthesis; Hydrolase family]: This gene was found in col.UvT at -5 logFC
+[AT4G36670 [Putative mannitol transport gene (MTD)]]: Found in col.UvT at -2 logFC
+[AT1G60590;AT1G48100 [Pectin lyase-like superfamily protein]: AT1G48100 was found in col.UvT at 2.8 logFC, AT1G60590 was found in M6PRvsCOL.U at -5 logFC. 
+[AT4G39330 [Putative mannitol transport gene]: Found in M6PRvCOL.U at -1.6 logFC
+[AT1G23870;AT2G18700;AT1G70290;AT4G22590;AT1G06410;AT4G29770;AT5G51460 [Trehalose biosynthesis-related genes]: Most found in M6PRvCOL.U
+[AT5G20250 [Raffinose synthesis; Hydrolase family]: Found in M6PRvCOL.U at 8.8 logFC
+[AT1G10550;AT2G01850 [Xyloglucan xyloglucosyl transerase (XXT) genes, cell elongation]: AT2G01850 found in M6PRvCOL.U at 1.8 logFC
+[AT1G32170;AT5G57550 [Xyloglucan endotransglycosylase-related proteins(XET), cell wall modification]: Found in M6PRvCOL.U at about 4 logFC
+[AT5G49360;AT1G02640 [Glycosyl hydrolase family 3; seed devleopment, carbohydrate metabolic process]:Found in M6PRvCOL.U at about 4 logFC
 
-The paper's findings on top genes:
-Reference: Table 2
+All of the genes mentioned in the paper fell into three categories: 
+- Not significantly different in any of our categories
+- Show to be different between control and M6PR untreated plants
+- Shown to be different between control plants treated and untreated. 
 
-COL.TvU:
-UP:
-[AT4G13210;AT3G53190 [pectate lyase genes, regulate cell wall degradation],
-[AT3G15720;AT1G10640 [Polygalacturonase genes],
-[AT5G20250 [Raffinose synthesis; Hydrolase family],
-[AT4G36670 [Putative mannitol transport gene (MTD)]]
-DOWN:
-[AT1G60590;AT1G48100 [Pectin lyase-like superfamily protein],
-[AT4G39330 [Putative mannitol transport gene]
+Between us and the publication, we fail to agree on the specific pathways that the M6PR gene uses to pre-condition the plant to salt, but we do agree that this gene is effective in pre-conditioning the plants to salt. We can see that it is effective because in both analysis' we see that the category M6PR.TvU has the lowest amount of affected genes, in the paper this meant that the plant did not have to work as hard to be resistant to salt when it posessed the M6PR gene. 
 
 
 
-M6PR.TvU:
-UP:
-[AT1G23870;AT2G18700;AT1G70290;AT4G22590;AT1G06410;AT4G29770;AT5G51460 [Trehalose biosynthesis-related genes]
-[AT5G20250 [Raffinose synthesis; Hydrolase family]
-DOWN: 
-[AT4G26080;AT5G57050 [AT4G26080, abscisic acid-activated signaling pathway],
-[AT5G57050, negative regulation of abscisic acid-activated signaling pathway]
 
 
 
-M6PRvCOL.U:
-UP:
-[AT1G10550;AT2G01850 [Xyloglucan xyloglucosyl transerase (XXT) genes, cell elongation],
-[AT1G32170;AT5G57550 [Xyloglucan endotransglycosylase-related proteins(XET), cell wall modification],
-[AT5G49360;AT1G02640 [Glycosyl hydrolase family 3; seed devleopment, carbohydrate metabolic process]
-
-The genes listed above were chosen for comparison the cause for gene change was not included in the table. Instead, in their results they listed these genes and which group they belonged to.  We found no similarities between the top genes we observed compared to theirs.  The paper did not specify whether or not these were the top genes from each group which could be the reason for no matches.
