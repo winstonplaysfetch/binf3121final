@@ -7,9 +7,9 @@ output: html_document
 
 **INTRODUCTION**
 
-In this experiment, Arabidopsis plants were transformed with the mannose-6-phosphate reductase (M6PR) gene from celery. These plants were observed to be more salt tolerant. They exibited reduced salt injury, had more vegetative growth and more seed production in the presence of salt than the wild-type (COL) plants. 
+My parter and I are reviewing an experiment published in NCBI in 2011 to attempt to reproduce the statistical programming analysis used in the paper. In this paper, Arabidopsis plants were transformed with the mannose-6-phosphate reductase (M6PR) gene from celery. These plants were observed to be more salt tolerant. They exibited reduced salt injury, had more vegetative growth and more seed production in the presence of salt than the wild-type (COL) plants.[Link to experiment](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3192998/) 
 
-In the presence of salt, many fewer gene differences were measured between M6PR and wild type (col) plants, this suggests that the M6PR gene was successful in pre-conditioning these plants to salt. In the untreated plants, many more genes were differently expressed. 
+The researchers found that in the presence of salt, many fewer gene differences were measured between M6PR and wild type (col) plants, this suggests that the M6PR gene was successful in pre-conditioning these plants to salt. In the untreated plants, many more genes were differently expressed. 
 
 If in our analysis, these results are the same in that in the presence of salt less genes show differences, we can conclude that the original paper is accurate. To measure this, we will define three groups: 
 
@@ -17,11 +17,13 @@ If in our analysis, these results are the same in that in the presence of salt l
 (B) Pathways mainly activated by the M6PR transgene
 (C) Pathways affected by both salt stress and the M6PR transgene
 
+Our Null and Alternative Hypothesis:
+
 H0: Our results are synonymous with the paper, group A has a lower number of affected genes than any other group. 
 
 Ha: Our results differ from the paper in some way. 
 
-In the paper, they used Bioconductor's GCRMA to normalize the data, AffyLimGUI to create p-values and linear plots of the data, and Mapman to tie the probe sets to annotations. 
+For their analysis, the reasearchers used Bioconductor's GCRMA to normalize the data, AffyLimGUI to create p-values and linear plots of the data, and Mapman to tie the probe sets to annotations. 
 
 For this paper, we installed and used libraries from Bioconductor. These are instructions on how to install Bioconductor: http://bioconductor.org/install/
 
@@ -36,7 +38,9 @@ We were able to install all dependencies for AffyLimGUI on Windows, but when att
 
 **ANALYSIS:**
 
-Begin Analysis, data import & normalization
+Our data, in CEL.gz files, is included in a zip folder with this project. [Here is a permanent link](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE18217)
+
+
 ```{r, message=FALSE, warning=F}
 #Required libraries
 library(affy)
@@ -176,6 +180,7 @@ vennDiagram(gc_result2)
 In our analysis, we got about the same amount of expressed genes as they did.  
 
 **Retrieve annotations, select top genes and account for multiple probe sets of the same gene**
+
 *Below are functions to calculate top lists with both the venDiagram categories and the bargraph, in the conclusion we only used the numbers from the bargraph so that we could more accurately see how our results compared to the paper, but both sets of numbers are useful*
 ```{r}
 f="ftp://ftp.arabidopsis.org/Microarrays/Affymetrix/affy_ATH1_array_elements-2010-12-20.txt" 
